@@ -17,15 +17,14 @@ fun main() {
     val lines: List<String> = wordsFile.readLines()
     wordsFile.writeText("")
 
-    val dictionaryWords: MutableMap<String, String> = mutableMapOf()
+    val dictionaryWords: MutableList<Words> = mutableListOf()
 
     for (i in lines) {
         val line = i.split("|")
-        val word = Words(original = line[0], translate = line[1], quantityApprove = line[2].toInt())
-        dictionaryWords[word.original] = word.translate
+        val word = Words(original = line[0], translate = line[1], quantityApprove = line.getOrNull(2)?.toIntOrNull() ?: 0)
+        dictionaryWords.add(word)
         wordsFile.appendText("${word.original}|${word.translate}|${word.quantityApprove}\n")
     }
-    println(dictionaryWords)
 }
 
 fun createStartWords() {

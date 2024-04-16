@@ -11,7 +11,6 @@ data class Words(
 )
 
 fun main() {
-    println(2 / 3)
 
     val wordsFile = File("words.txt")
     if (wordsFile.exists()) createStartWords()

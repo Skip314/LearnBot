@@ -4,6 +4,8 @@ import java.io.File
 
 val dictionaryWords: MutableList<Words> = mutableListOf()
 
+const val APPROVED_LEARN_WORDS = 3
+
 data class Words(
     val original: String,
     val translate: String,
@@ -13,7 +15,7 @@ data class Words(
 fun main() {
 
     val wordsFile = File("words.txt")
-    if (wordsFile.exists()) createStartWords()
+    if (!wordsFile.exists()) createStartWords()
 
     val lines: List<String> = wordsFile.readLines()
 
@@ -52,7 +54,7 @@ fun createStartWords() {
 
 fun getStatistic() {
 
-    val approved = dictionaryWords.filter{it.quantityApprove >= 3}.size
+    val approved = dictionaryWords.filter{it.quantityApprove >= APPROVED_LEARN_WORDS}.size
     val part = 100 * approved / dictionaryWords.size
 
     println("Выучено $approved из ${dictionaryWords.size} слов | ${part}%")

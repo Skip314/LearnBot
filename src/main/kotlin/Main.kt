@@ -83,6 +83,7 @@ fun learnWords() {
             println("$num: ${i.translate}")
             num++
         }
+
         val ansver = readln()
     }
 }

@@ -1,7 +1,6 @@
 package org.example
 
 import java.io.File
-import kotlin.random.Random
 
 val dictionaryWords: MutableList<Words> = mutableListOf()
 
@@ -38,7 +37,7 @@ fun main() {
         when (readln().toInt()) {
 
             0 -> return
-            1 -> learnWords()
+            1 -> ""
             2 -> getStatistic()
             else -> println("Выберите из списка:")
         }
@@ -55,34 +54,8 @@ fun createStartWords() {
 
 fun getStatistic() {
 
-    val approved = dictionaryWords.filter{it.quantityApprove >= APPROVED_LEARN_WORDS}.size
+    val approved = dictionaryWords.filter { it.quantityApprove >= APPROVED_LEARN_WORDS }.size
     val part = 100 * approved / dictionaryWords.size
 
     println("Выучено $approved из ${dictionaryWords.size} слов | ${part}%")
-}
-
-fun learnWords() {
-
-    while (true) {
-        println()
-        var unlearnedWords = mutableListOf<Words>()
-        for (word in dictionaryWords) if (word.quantityApprove <= APPROVED_LEARN_WORDS) unlearnedWords.add(word)
-
-        if (unlearnedWords.size == 0) {
-            println("Все слова выучены")
-            return
-        }
-
-        unlearnedWords.shuffle()
-        val fourWords = unlearnedWords.take(4)
-        val approve = fourWords.random().original
-
-        println("Выберите верный перевод $approve")
-        var num = 1
-        for (i in fourWords) {
-            println("$num: ${i.translate}")
-            num++
-        }
-        val ansver = readln()
-    }
 }

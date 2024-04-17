@@ -55,7 +55,7 @@ fun createStartWords() {
 
 fun getStatistic() {
 
-    val approved = dictionaryWords.filter { it.quantityApprove >= APPROVED_LEARN_WORDS }.size
+    val approved = dictionaryWords.filter{it.quantityApprove >= APPROVED_LEARN_WORDS}.size
     val part = 100 * approved / dictionaryWords.size
 
     println("Выучено $approved из ${dictionaryWords.size} слов | ${part}%")

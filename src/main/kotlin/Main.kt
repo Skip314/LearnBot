@@ -1,11 +1,11 @@
 package org.example
 
 import java.io.File
-import kotlin.random.Random
 
 val dictionaryWords: MutableList<Words> = mutableListOf()
 
 const val APPROVED_LEARN_WORDS = 3
+const val QUANTITY_WORDS = 4
 
 data class Words(
     val original: String,
@@ -64,23 +64,20 @@ fun getStatistic() {
 fun learnWords() {
 
     while (true) {
-        println()
-        var unlearnedWords = mutableListOf<Words>()
-        for (word in dictionaryWords) if (word.quantityApprove <= APPROVED_LEARN_WORDS) unlearnedWords.add(word)
+        val unlearnedWords = dictionaryWords.filter { it.quantityApprove <= APPROVED_LEARN_WORDS }
 
-        if (unlearnedWords.size == 0) {
+        if (unlearnedWords.isEmpty()) {
             println("Все слова выучены")
             return
         }
 
-        unlearnedWords.shuffle()
-        val fourWords = unlearnedWords.take(4)
+        val fourWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
         val approve = fourWords.random().original
 
         println("Выберите верный перевод $approve")
         var num = 1
-        for (i in fourWords) {
-            println("$num: ${i.translate}")
+        fourWords.forEach { words ->
+            println("$num - ${words.translate}")
             num++
         }
 

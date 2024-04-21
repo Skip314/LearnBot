@@ -72,13 +72,13 @@ fun learnWords() {
             return
         }
 
-        val learnWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
-        println(learnWords)
+        var learnWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
 
 
         if (learnWords.size < QUANTITY_WORDS) {
             val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
-            learnWords.toMutableList().add(learnedWords.take(QUANTITY_WORDS - learnWords.size))
+                .take(QUANTITY_WORDS - learnWords.size)
+            learnWords = (learnWords + learnedWords).shuffled()
         }
 
         val approve = learnWords.random().original

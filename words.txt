@@ -4,3 +4,4 @@ cat|кошка|4
 city|город|5
 approve|утверждено|4
 quantity|количество|0
+banana|банан|0

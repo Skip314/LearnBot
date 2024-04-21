@@ -51,6 +51,7 @@ fun createStartWords() {
     wordsFile.appendText("hello|привет|0\n")
     wordsFile.appendText("dog|собака|0\n")
     wordsFile.appendText("cat|кошка|0\n")
+    wordsFile.appendText("i|я|0\n")
 }
 
 fun getStatistic() {
@@ -71,16 +72,24 @@ fun learnWords() {
             return
         }
 
-        val fourWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
-        val approve = fourWords.random().original
+        val learnWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
+        println(learnWords)
+
+
+        if (learnWords.size < QUANTITY_WORDS) {
+            val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
+            learnWords.toMutableList().add(learnedWords.take(QUANTITY_WORDS - learnWords.size))
+        }
+
+        val approve = learnWords.random().original
 
         println("Выберите верный перевод $approve")
         var num = 1
-        fourWords.forEach { words ->
+        learnWords.forEach { words ->
             println("$num - ${words.translate}")
             num++
         }
 
-        val ansver = readln()
+        val answer = readln()
     }
 }

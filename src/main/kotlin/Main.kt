@@ -74,14 +74,13 @@ fun learnWords() {
 
         var learnWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
 
+        val approve = learnWords.random().original
 
         if (learnWords.size < QUANTITY_WORDS) {
             val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
                 .take(QUANTITY_WORDS - learnWords.size)
             learnWords = (learnWords + learnedWords).shuffled()
         }
-
-        val approve = learnWords.random().original
 
         println("Выберите верный перевод $approve")
         var num = 1

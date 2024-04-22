@@ -72,7 +72,7 @@ fun learnWords() {
             return
         }
 
-        var learnWords = unlearnedWords.toMutableList().shuffled().take(QUANTITY_WORDS)
+        var learnWords = unlearnedWords.shuffled().take(QUANTITY_WORDS)
 
         val approve = learnWords.random().original
 
@@ -83,11 +83,7 @@ fun learnWords() {
         }
 
         println("Выберите верный перевод $approve")
-        var num = 1
-        learnWords.forEach { words ->
-            println("$num - ${words.translate}")
-            num++
-        }
+        learnWords.forEachIndexed { index, words -> println("$index - ${words.translate}") }
 
         val answer = readln()
     }

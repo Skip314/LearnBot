@@ -5,6 +5,7 @@ import java.io.File
 val dictionaryWords: MutableList<Words> = mutableListOf()
 
 const val APPROVED_LEARN_WORDS = 3
+const val QUANTITY_WORDS = 4
 
 data class Words(
     val original: String,
@@ -37,7 +38,7 @@ fun main() {
         when (readln().toInt()) {
 
             0 -> return
-            1 -> ""
+            1 -> learnWords()
             2 -> getStatistic()
             else -> println("Выберите из списка:")
         }
@@ -50,6 +51,7 @@ fun createStartWords() {
     wordsFile.appendText("hello|привет|0\n")
     wordsFile.appendText("dog|собака|0\n")
     wordsFile.appendText("cat|кошка|0\n")
+    wordsFile.appendText("i|я|0\n")
 }
 
 fun getStatistic() {
@@ -58,4 +60,31 @@ fun getStatistic() {
     val part = 100 * approved / dictionaryWords.size
 
     println("Выучено $approved из ${dictionaryWords.size} слов | ${part}%")
+}
+
+fun learnWords() {
+
+    while (true) {
+        val unlearnedWords = dictionaryWords.filter { it.quantityApprove <= APPROVED_LEARN_WORDS }
+
+        if (unlearnedWords.isEmpty()) {
+            println("Все слова выучены")
+            return
+        }
+
+        var learnWords = unlearnedWords.shuffled().take(QUANTITY_WORDS)
+
+        val approve = learnWords.random().original
+
+        if (learnWords.size < QUANTITY_WORDS) {
+            val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
+                .take(QUANTITY_WORDS - learnWords.size)
+            learnWords = (learnWords + learnedWords).shuffled()
+        }
+
+        println("Выберите верный перевод $approve")
+        learnWords.forEachIndexed { index, words -> println("$index - ${words.translate}") }
+
+        val answer = readln()
+    }
 }

@@ -103,7 +103,7 @@ fun saveDictionary(approve: Words) {
 
     val wordsFile = File("words.txt")
     wordsFile.writeText("")
-    for (word in dictionaryWords){
+    for (word in dictionaryWords) {
         wordsFile.appendText("${word.original}|${word.translate}|${word.quantityApprove}\n")
     }
 }

@@ -10,7 +10,7 @@ const val QUANTITY_WORDS = 4
 data class Words(
     val original: String,
     val translate: String,
-    val quantityApprove: Int,
+    var quantityApprove: Int,
 )
 
 fun main() {
@@ -92,10 +92,13 @@ fun learnWords() {
         if (answer == 0) return
         if (learnWords.indexOf(approve) == answer - 1) {
             println("Верно")
+            saveDictionary(approve)
         }
     }
 }
 
-fun saveDictionary() {
-    TODO()
+fun saveDictionary(approve: Words) {
+
+    dictionaryWords[dictionaryWords.indexOf(approve)].quantityApprove += 1
+
 }

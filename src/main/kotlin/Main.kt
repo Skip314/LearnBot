@@ -65,6 +65,7 @@ fun getStatistic() {
 fun learnWords() {
 
     while (true) {
+        println()
         val unlearnedWords = dictionaryWords.filter { it.quantityApprove <= APPROVED_LEARN_WORDS }
 
         if (unlearnedWords.isEmpty()) {
@@ -74,7 +75,7 @@ fun learnWords() {
 
         var learnWords = unlearnedWords.shuffled().take(QUANTITY_WORDS)
 
-        val approve = learnWords.random().original
+        val approve = learnWords.random()
 
         if (learnWords.size < QUANTITY_WORDS) {
             val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
@@ -82,9 +83,19 @@ fun learnWords() {
             learnWords = (learnWords + learnedWords).shuffled()
         }
 
-        println("Выберите верный перевод $approve")
-        learnWords.forEachIndexed { index, words -> println("$index - ${words.translate}") }
+        println("0 - выход в главное меню")
+        println("Выберите верный перевод ${approve.original}")
+        learnWords.forEachIndexed { index, words -> println("${index + 1} - ${words.translate}") }
 
-        val answer = readln()
+        val answer = readln().toInt()
+
+        if (answer == 0) return
+        if (learnWords.indexOf(approve) == answer - 1) {
+            println("Верно")
+        }
     }
+}
+
+fun saveDictionary() {
+    TODO()
 }

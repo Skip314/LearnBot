@@ -2,12 +2,12 @@ package org.example
 
 import java.io.File
 
-val dictionaryWords: MutableList<Words> = mutableListOf()
+val dictionaryWords: MutableList<Word> = mutableListOf()
 
 const val APPROVED_LEARN_WORDS = 3
 const val QUANTITY_WORDS = 4
 
-data class Words(
+data class Word(
     val original: String,
     val translate: String,
     var quantityApprove: Int,
@@ -23,7 +23,7 @@ fun main() {
     for (i in lines) {
         val line = i.split("|")
         val word =
-            Words(
+            Word(
                 original = line[0],
                 translate = line[1],
                 quantityApprove = line.getOrNull(2)?.toIntOrNull() ?: 0
@@ -83,23 +83,28 @@ fun learnWords() {
             learnWords = (learnWords + learnedWords).shuffled()
         }
 
-        println("0 - выход в главное меню")
         println("Выберите верный перевод ${approve.original}")
         learnWords.forEachIndexed { index, words -> println("${index + 1} - ${words.translate}") }
+        println("0 - выход в главное меню")
 
-        val answer = readln().toInt()
+        val answer = readln().toIntOrNull()
 
         if (answer == 0) return
-        if (learnWords.indexOf(approve) == answer - 1) {
-            println("Верно")
-            saveDictionary(approve)
-        }
+        if (answer != null) {
+
+            if (learnWords.indexOf(approve) == answer - 1) {
+
+                println("Верно")
+                saveDictionary(approve)
+            } else println("Не верно")
+
+        } else println("Не верно")
     }
 }
 
-fun saveDictionary(approve: Words) {
+fun saveDictionary(approve: Word) {
 
-    dictionaryWords[dictionaryWords.indexOf(approve)].quantityApprove += 1
+    approve.quantityApprove += 1
 
     val wordsFile = File("words.txt")
     wordsFile.writeText("")

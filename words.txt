@@ -1,7 +1,7 @@
-hello|привет|3
-dog|собака|2
-cat|кошка|3
-city|город|3
+hello|привет|1
+dog|собака|4
+cat|кошка|1
+city|город|2
 approve|утверждено|1
-quantity|количество|3
-banana|банан|3
+quantity|количество|0
+banana|банан|2

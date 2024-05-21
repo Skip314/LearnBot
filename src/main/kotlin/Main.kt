@@ -2,12 +2,12 @@ package org.example
 
 import java.io.File
 
-val dictionaryWords: MutableList<Word> = mutableListOf()
+val dictionaryWords: MutableList<Words> = mutableListOf()
 
 const val APPROVED_LEARN_WORDS = 3
 const val QUANTITY_WORDS = 4
 
-data class Word(
+data class Words(
     val original: String,
     val translate: String,
     var quantityApprove: Int,
@@ -23,7 +23,7 @@ fun main() {
     for (i in lines) {
         val line = i.split("|")
         val word =
-            Word(
+            Words(
                 original = line[0],
                 translate = line[1],
                 quantityApprove = line.getOrNull(2)?.toIntOrNull() ?: 0
@@ -35,11 +35,11 @@ fun main() {
     while (true) {
 
         println("Меню: \n1 – Учить слова, \n2 – Статистика, \n0 – Выход")
-        when (readln().toInt()) {
+        when (readln()) {
 
-            0 -> return
-            1 -> learnWords()
-            2 -> getStatistic()
+            "0" -> return
+            "1" -> learnWords()
+            "2" -> getStatistic()
             else -> println("Выберите из списка:")
         }
         println()
@@ -66,7 +66,7 @@ fun learnWords() {
 
     while (true) {
         println()
-        val unlearnedWords = dictionaryWords.filter { it.quantityApprove <= APPROVED_LEARN_WORDS }
+        val unlearnedWords = dictionaryWords.filter { it.quantityApprove < APPROVED_LEARN_WORDS }
 
         if (unlearnedWords.isEmpty()) {
             println("Все слова выучены")
@@ -83,28 +83,22 @@ fun learnWords() {
             learnWords = (learnWords + learnedWords).shuffled()
         }
 
+        println("0 - выход в главное меню")
         println("Выберите верный перевод ${approve.original}")
         learnWords.forEachIndexed { index, words -> println("${index + 1} - ${words.translate}") }
-        println("0 - выход в главное меню")
 
-        val answer = readln().toIntOrNull()
+        val answer = readln().toIntOrNull() ?: -1
 
         if (answer == 0) return
-        if (answer != null) {
-
-            if (learnWords.indexOf(approve) == answer - 1) {
-
-                println("Верно")
-                saveDictionary(approve)
-            } else println("Не верно")
-
-        } else println("Не верно")
+        if (learnWords.indexOf(approve) == answer - 1) {
+            println("Верно")
+            dictionaryWords[dictionaryWords.indexOf(approve)].quantityApprove += 1
+            saveDictionary()
+        }
     }
 }
 
-fun saveDictionary(approve: Word) {
-
-    approve.quantityApprove += 1
+fun saveDictionary() {
 
     val wordsFile = File("words.txt")
     wordsFile.writeText("")

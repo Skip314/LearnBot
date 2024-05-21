@@ -78,7 +78,7 @@ fun learnWords() {
         val approve = learnWords.random()
 
         if (learnWords.size < QUANTITY_WORDS) {
-            val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
+            val learnedWords = dictionaryWords.filter { it.quantityApprove >= APPROVED_LEARN_WORDS }
                 .take(QUANTITY_WORDS - learnWords.size)
             learnWords = (learnWords + learnedWords).shuffled()
         }

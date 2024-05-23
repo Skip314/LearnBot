@@ -30,11 +30,10 @@ fun main() {
             )
         dictionaryWords.add(word)
     }
-    println(dictionaryWords)
 
     while (true) {
 
-        println("Меню: \n1 – Учить слова, \n2 – Статистика, \n0 – Выход")
+        println("Меню: \n1 – Учить слова \n2 – Статистика \n0 – Выход")
         when (readln()) {
 
             "0" -> return
@@ -92,7 +91,7 @@ fun learnWords() {
         if (answer == 0) return
         if (learnWords.indexOf(approve) == answer - 1) {
             println("Верно")
-            dictionaryWords[dictionaryWords.indexOf(approve)].quantityApprove += 1
+            approve.quantityApprove += 1
             saveDictionary()
         }
     }

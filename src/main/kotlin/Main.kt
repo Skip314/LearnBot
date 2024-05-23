@@ -10,7 +10,7 @@ const val QUANTITY_WORDS = 4
 data class Words(
     val original: String,
     val translate: String,
-    val quantityApprove: Int,
+    var quantityApprove: Int,
 )
 
 fun main() {
@@ -30,16 +30,15 @@ fun main() {
             )
         dictionaryWords.add(word)
     }
-    println(dictionaryWords)
 
     while (true) {
 
-        println("Меню: \n1 – Учить слова, \n2 – Статистика, \n0 – Выход")
-        when (readln().toInt()) {
+        println("Меню: \n1 – Учить слова \n2 – Статистика \n0 – Выход")
+        when (readln()) {
 
-            0 -> return
-            1 -> learnWords()
-            2 -> getStatistic()
+            "0" -> return
+            "1" -> learnWords()
+            "2" -> getStatistic()
             else -> println("Выберите из списка:")
         }
         println()
@@ -65,7 +64,8 @@ fun getStatistic() {
 fun learnWords() {
 
     while (true) {
-        val unlearnedWords = dictionaryWords.filter { it.quantityApprove <= APPROVED_LEARN_WORDS }
+        println()
+        val unlearnedWords = dictionaryWords.filter { it.quantityApprove < APPROVED_LEARN_WORDS }
 
         if (unlearnedWords.isEmpty()) {
             println("Все слова выучены")
@@ -74,17 +74,34 @@ fun learnWords() {
 
         var learnWords = unlearnedWords.shuffled().take(QUANTITY_WORDS)
 
-        val approve = learnWords.random().original
+        val approve = learnWords.random()
 
         if (learnWords.size < QUANTITY_WORDS) {
-            val learnedWords = dictionaryWords.filter { it.quantityApprove > APPROVED_LEARN_WORDS }
+            val learnedWords = dictionaryWords.filter { it.quantityApprove >= APPROVED_LEARN_WORDS }
                 .take(QUANTITY_WORDS - learnWords.size)
             learnWords = (learnWords + learnedWords).shuffled()
         }
 
-        println("Выберите верный перевод $approve")
-        learnWords.forEachIndexed { index, words -> println("$index - ${words.translate}") }
+        println("0 - выход в главное меню")
+        println("Выберите верный перевод ${approve.original}")
+        learnWords.forEachIndexed { index, words -> println("${index + 1} - ${words.translate}") }
 
-        val answer = readln()
+        val answer = readln().toIntOrNull() ?: -1
+
+        if (answer == 0) return
+        if (learnWords.indexOf(approve) == answer - 1) {
+            println("Верно")
+            approve.quantityApprove += 1
+            saveDictionary()
+        }
+    }
+}
+
+fun saveDictionary() {
+
+    val wordsFile = File("words.txt")
+    wordsFile.writeText("")
+    for (word in dictionaryWords) {
+        wordsFile.appendText("${word.original}|${word.translate}|${word.quantityApprove}\n")
     }
 }

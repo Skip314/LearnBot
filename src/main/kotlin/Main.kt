@@ -1,7 +1,5 @@
 package org.example
 
-import java.io.File
-
 val trainer = LearnWordsTrainer()
 
 fun main() {

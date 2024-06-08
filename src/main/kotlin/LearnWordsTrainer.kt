@@ -2,16 +2,17 @@ package org.example
 
 import java.io.File
 
-const val APPROVED_LEARN_WORDS = 3
-const val QUANTITY_WORDS = 4
-
 data class Words(val original: String, val translate: String, var quantityApprove: Int)
+data class Statistic(val learned: Int, val part: Int, val quantityWords: Int)
 
-data class AnswerOptions(var variance: MutableList<Words>) {
+data class AnswerOptions(var variance: List<Words>) {
     val correctAnswer: Words = variance.random()
 }
 
-class LearnWordsTrainer {
+class LearnWordsTrainer(
+    val approvedLearnWords: Int = 3,
+    val quantityWords: Int = 4,
+) {
 
     val dictionaryWords: MutableList<Words> = mutableListOf()
 
@@ -42,11 +43,35 @@ class LearnWordsTrainer {
         }
     }
 
-    fun getStatistics() {
+    fun getStatistics(): Statistic {
 
-        val learned = dictionaryWords.filter { it.quantityApprove >= APPROVED_LEARN_WORDS }.size
+        val learned = dictionaryWords.filter { it.quantityApprove >= approvedLearnWords }.size
         val part = 100 * learned / dictionaryWords.size
 
-        println("выучено ${learned} слов из ${dictionaryWords.size} | ${part}%")
+        return Statistic(learned, part, dictionaryWords.size)
+    }
+
+    fun getQuestion(): AnswerOptions? {
+
+        val learnWords =
+            dictionaryWords.filter { it.quantityApprove < approvedLearnWords }.toMutableList().take(
+                quantityWords
+            )
+        if (learnWords.isEmpty()) {
+            return null
+        }
+
+        val question = AnswerOptions(learnWords)
+
+        if (question.variance.size < quantityWords) {
+            val learnedWords =
+                dictionaryWords.filter { it.quantityApprove >= approvedLearnWords }
+                    .take(quantityWords - question.variance.size)
+            question.variance = (question.variance + learnedWords).shuffled().toMutableList()
+            return question
+        }
+        return question
     }
 }
+
+

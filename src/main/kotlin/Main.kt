@@ -1,8 +1,9 @@
 package org.example
 
-val trainer = LearnWordsTrainer()
 
 fun main() {
+
+    val trainer = LearnWordsTrainer()
 
     trainer.loadDictionary()
 
@@ -12,31 +13,26 @@ fun main() {
         when (readln()) {
 
             "0" -> return
-            "1" -> learnWords()
-            "2" -> trainer.getStatistics()
+            "1" -> learnWords(trainer)
+            "2" -> {
+                val statistic = trainer.getStatistics()
+                println("выучено ${statistic.learned} слов из ${statistic.quantityWords} | ${statistic.part}%")
+            }
+
             else -> println("Выберите из списка:")
         }
         println()
     }
 }
 
-fun learnWords() {
+fun learnWords(trainer: LearnWordsTrainer) {
 
     while (true) {
 
-        val learnWords =
-            trainer.dictionaryWords.filter { it.quantityApprove < APPROVED_LEARN_WORDS }.toMutableList()
-        if (learnWords.isEmpty()) {
+        val question = trainer.getQuestion()
+        if (question == null) {
             println("Все слова выучены")
             return
-        }
-
-        val question = AnswerOptions(learnWords)
-
-        if (question.variance.size < QUANTITY_WORDS) {
-            val learnedWords = trainer.dictionaryWords.filter { it.quantityApprove >= APPROVED_LEARN_WORDS }
-                .take(QUANTITY_WORDS - question.variance.size)
-            question.variance = (question.variance + learnedWords).shuffled().toMutableList()
         }
 
         println()

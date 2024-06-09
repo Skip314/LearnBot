@@ -36,17 +36,12 @@ fun learnWords(trainer: LearnWordsTrainer) {
         }
 
         println()
-        println("0 - выход в главное меню")
         println("Выберите верный перевод ${question.correctAnswer.original}")
         question.variance.forEachIndexed { index, words -> println("${index + 1} - ${words.translate}") }
+        println("0 - выход в главное меню")
 
         val answer = readln().toIntOrNull() ?: -1
-
         if (answer == 0) return
-        if (question.variance.indexOf(question.correctAnswer) == answer.minus(1)) {
-            println("Верно")
-            question.correctAnswer.quantityApprove += 1
-            trainer.saveDictionary()
-        }
+        trainer.checkAndRecordAnswer(answer, question)
     }
 }

@@ -34,7 +34,7 @@ class LearnWordsTrainer(
         }
     }
 
-    fun saveDictionary() {
+    private fun saveDictionary() {
 
         val wordsFile = File("words.txt")
         wordsFile.writeText("")
@@ -67,10 +67,19 @@ class LearnWordsTrainer(
             val learnedWords =
                 dictionaryWords.filter { it.quantityApprove >= approvedLearnWords }
                     .take(quantityWords - question.variance.size)
-            question.variance = (question.variance + learnedWords).shuffled().toMutableList()
+            question.variance = (question.variance + learnedWords).shuffled()
             return question
         }
         return question
+    }
+
+    fun checkAndRecordAnswer(answer: Int, question: AnswerOptions) {
+
+        if (question.variance.indexOf(question.correctAnswer) == answer.minus(1)) {
+            println("Верно")
+            question.correctAnswer.quantityApprove += 1
+            saveDictionary()
+        }
     }
 }
 

@@ -10,13 +10,11 @@ fun main(args: Array<String>) {
         Thread.sleep(1000)
         val updates = botService.getUpdates(updateId)
 
-        if (botService.getUpdateId(updates) == null) continue
-        else {
-            println(updates)
-            updateId = botService.getUpdateId(updates)!!.toInt() + 1
-            val chatId = botService.getChatId(updates)
-            botService.sendMessage(chatId, "Привет")
-        }
+        updateId = botService.getUpdateId(updates)?.toIntOrNull()?.plus(1) ?: continue
+        println(updates)
+        val chatId = botService.getChatId(updates)
+        botService.sendMessage(chatId, "Привет")
+
 
         println(botService.getTextClient(updates))
     }

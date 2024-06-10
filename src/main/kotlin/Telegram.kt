@@ -15,11 +15,13 @@ fun main(args: Array<String>) {
 
         val startId = updates.lastIndexOf("update_id")
         val endId = updates.lastIndexOf(",\n\"message\"")
-        if (startId == - 1 || endId == - 1) continue
+        if (startId == -1 || endId == -1) continue
         else println(updates)
         val updateIdString = updates.substring(startId + 11, endId)
 
         updateId = updateIdString.toInt() + 1
+
+        println(getTextClient(updates))
     }
 }
 
@@ -31,4 +33,14 @@ fun getUpdates(botToken: String, updateId: Int): String {
     val response = client.send(request, HttpResponse.BodyHandlers.ofString())
 
     return response.body()
+}
+
+fun getTextClient(updates: String): String? {
+
+    val messageTextRegex: Regex = "\"text\":\"(.+?)\"".toRegex()
+    val matchResult = messageTextRegex.find(updates)
+    val groups = matchResult?.groups
+
+    println(groups)
+    return groups?.get(1)?.value
 }

@@ -13,13 +13,11 @@ fun main(args: Array<String>) {
         Thread.sleep(1000)
         val updates = getUpdates(botToken, updateId)
 
-        val startId = updates.lastIndexOf("update_id")
-        val endId = updates.lastIndexOf(",\n\"message\"")
-        if (startId == -1 || endId == -1) continue
-        else println(updates)
-        val updateIdString = updates.substring(startId + 11, endId)
-
-        updateId = updateIdString.toInt() + 1
+        if (getUpdateId(updates) == null) continue
+        else {
+            println(updates)
+            updateId = getUpdateId(updates)!!.toInt() + 1
+        }
 
         println(getTextClient(updates))
     }
@@ -41,6 +39,23 @@ fun getTextClient(updates: String): String? {
     val matchResult = messageTextRegex.find(updates)
     val groups = matchResult?.groups
 
-    println(groups)
+    return groups?.get(1)?.value
+}
+
+fun getChatId(updates: String): Int? {
+
+    val messageTextRegex: Regex = "\"id\":(.+?),".toRegex()
+    val matchResult = messageTextRegex.find(updates)
+    val groups = matchResult?.groups
+
+    return groups?.get(1)?.value?.toIntOrNull()
+}
+
+fun getUpdateId(updates: String): String? {
+
+    val messageTextRegex: Regex = "\"update_id\":(.+?),".toRegex()
+    val matchResult = messageTextRegex.find(updates)
+    val groups = matchResult?.groups
+
     return groups?.get(1)?.value
 }

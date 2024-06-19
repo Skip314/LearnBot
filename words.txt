@@ -1,4 +1,4 @@
 city|город|3
 approve|утверждено|3
 quantity|количество|3
-banana|банан|3
+banana|банан|2
